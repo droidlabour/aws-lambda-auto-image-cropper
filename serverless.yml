@@ -18,11 +18,27 @@ package:
     - deps/**
   exclude:
     - .git/**
+    - midv_test.py
+
+layers:
+  docrecog:
+    path: layer
+    compatibleRuntimes:
+      - python3.7
+  tesseract:
+    path: tesseract
+    compatibleRuntimes:
+      - python3.7
 
 functions:
   image-cropter:
     handler: handler.cropter
     memorySize: 512
+    environment:
+      TESSDATA_PREFIX: /opt/tessdata
+    layers:
+      - { Ref: DocrecogLambdaLayer }
+      - { Ref: TesseractLambdaLayer }
     events:
       - http:
           path: image/cropter
